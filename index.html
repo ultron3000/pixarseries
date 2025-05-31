@@ -1,55 +1,312 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pixar Series Index</title>
+  <title>Pixar </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pixar: {
+              blue: '#1D4ED8',
+              yellow: '#FACC15',
+              red: '#DC2626',
+              green: '#16A34A',
+              purple: '#7E22CE'
+            }
+          },
+          fontFamily: {
+            'display': ['"Pixar"', 'sans-serif'],
+            'sans': ['"Pixar Sans"', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap');
+    
     body {
-      font-family: sans-serif;
-      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
       color: white;
       min-height: 100vh;
-      padding: 2rem;
     }
+    
+    .pixar-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    
     .card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
       overflow: hidden;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
     }
+    
     .card:hover {
-      transform: scale(1.02);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.12);
     }
-    .card img {
+    
+    .card-img {
       width: 100%;
-      height: auto;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
     }
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: bold;
+    
+    .card:hover .card-img {
+      transform: scale(1.05);
+    }
+    
+    .card-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+    
+    .card-content {
+      position: relative;
+      z-index: 5;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+      padding-top: 2rem;
+      margin-top: -2rem;
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .hero {
+      background: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/059df0b4-8444-4b77-a472-0e70e7f33255/det5xsw-76dc53cc-e830-4124-b628-55683d6bac0e.jpg/v1/fill/w_1025,h_780,q_70,strp/pixar_logo__1996_2006___full_screen__by_blakeharris02_det5xsw-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjYzNCIsInBhdGgiOiJcL2ZcLzA1OWRmMGI0LTg0NDQtNGI3Ny1hNDcyLTBlNzBlN2YzMzI1NVwvZGV0NXhzdy03NmRjNTNjYy1lODMwLTQxMjQtYjYyOC01NTY4M2Q2YmFjMGUuanBnIiwid2lkdGgiOiI8PTM0NjIifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.k64766aSnFcumeEUs8tYvPhpwhVMM5sBd96QOzwpvsM') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to right, rgba(15, 12, 41, 0.9) 0%, rgba(48, 43, 99, 0.7) 100%);
+    }
+    
+    .footer {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    .social-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-3px) scale(1.1);
+    }
+    
+    @media (max-width: 768px) {
+      .card-img {
+        height: 200px;
+      }
     }
   </style>
 </head>
-<body>
-  <h1 class="text-4xl font-bold mb-8 text-center">Pixar Series Collection</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <a href="win-or-lose.html" class="card block text-white">
-      <img src="https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/8578/1740105338578-h" alt="Win or Lose">
-      <div class="p-4">
-        <h2 class="card-title">Win or Lose</h2>
-        <p class="text-sm text-gray-300">Pixar's original animated series about a middle school softball team's journey.</p>
+<body class="flex flex-col">
+  <!-- Navigation -->
+  <header class="py-4 px-6 md:px-12 lg:px-24 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm sticky top-0 z-50">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-film text-pixar-yellow text-2xl"></i>
+        <span class="pixar-logo text-2xl font-bold bg-gradient-to-r from-pixar-yellow to-pixar-red bg-clip-text text-transparent">Pixar </span>
       </div>
-    </a>
-    <a href="inside-out.html" class="card block text-white">
-      <img src="https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/5596/1732608105596-h" alt="Inside Out">
-      <div class="p-4">
-        <h2 class="card-title">Inside Out: The Series</h2>
-        <p class="text-sm text-gray-300">Dream Productions brings Riley’s emotional adventures to life in this TV mini series.</p>
+      <nav class="hidden md:flex space-x-8">
+        <a href="#" class="nav-link text-white font-medium">Home</a>
+        <a href="#" class="nav-link text-white font-medium">Series</a>
+        <a href="#" class="nav-link text-white font-medium">Movies</a>
+        <a href="#" class="nav-link text-white font-medium">About</a>
+        <a href="#" class="nav-link text-white font-medium">Contact</a>
+      </nav>
+      <button class="md:hidden text-white">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero py-20 px-6 md:px-12 lg:px-24 relative">
+    <div class="relative z-10 max-w-4xl mx-auto text-center">
+
       </div>
-    </a>
-  </div>
+    </div>
+  </section>
+
+
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Win or Lose Card -->
+        <a href="win-or-lose.html" class="card block text-white group">
+          <div class="overflow-hidden">
+            <img src="https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/8578/1740105338578-h" alt="Win or Lose" class="card-img">
+          </div>
+          <div class="card-content p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-2xl font-bold group-hover:text-pixar-yellow transition-colors">Win or Lose</h3>
+              <div class="flex items-center text-pixar-yellow">
+                <i class="fas fa-star"></i>
+                <span class="ml-1">8.7</span>
+              </div>
+            </div>
+            <p class="text-gray-300 mb-4">Pixar's original animated series about a middle school softball team's journey through competition and friendship.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-pixar-blue bg-opacity-30 px-2 py-1 rounded">Comedy</span>
+              <span class="text-xs bg-pixar-green bg-opacity-30 px-2 py-1 rounded">Sports</span>
+              <span class="text-xs bg-pixar-purple bg-opacity-30 px-2 py-1 rounded">Animation</span>
+            </div>
+          </div>
+          <span class="card-badge">New Episode</span>
+        </a>
+
+        <!-- Inside Out Card -->
+        <a href="inside-out.html" class="card block text-white group">
+          <div class="overflow-hidden">
+            <img src="https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/5596/1732608105596-h" alt="Inside Out" class="card-img">
+          </div>
+          <div class="card-content p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-2xl font-bold group-hover:text-pixar-red transition-colors">Inside Out: The Series</h3>
+              <div class="flex items-center text-pixar-yellow">
+                <i class="fas fa-star"></i>
+                <span class="ml-1">9.2</span>
+              </div>
+            </div>
+            <p class="text-gray-300 mb-4">Dream Productions brings Riley's emotional adventures to life in this TV mini series exploring new feelings and challenges.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-pixar-red bg-opacity-30 px-2 py-1 rounded">Emotional</span>
+              <span class="text-xs bg-pixar-purple bg-opacity-30 px-2 py-1 rounded">Animation</span>
+              <span class="text-xs bg-pixar-blue bg-opacity-30 px-2 py-1 rounded">Adventure</span>
+            </div>
+          </div>
+          <span class="card-badge">New Episode</span>
+        </a>
+
+        <!-- New Elemental Series Card -->
+        <a href="#" class="card block text-white group">
+          <div class="overflow-hidden">
+            <img src="https://lumiere-a.akamaihd.net/v1/images/p_elemental_7f8538a5.jpeg" alt="Elemental" class="card-img">
+          </div>
+          <div class="card-content p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-2xl font-bold group-hover:text-pixar-blue transition-colors">Elemental Stories</h3>
+              <div class="flex items-center text-pixar-yellow">
+                <i class="fas fa-star"></i>
+                <span class="ml-1">8.5</span>
+              </div>
+            </div>
+            <p class="text-gray-300 mb-4">Explore the vibrant Element City in this new series following Ember and Wade's adventures beyond the movie.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-pixar-red bg-opacity-30 px-2 py-1 rounded">Romance</span>
+              <span class="text-xs bg-pixar-blue bg-opacity-30 px-2 py-1 rounded">Fantasy</span>
+              <span class="text-xs bg-pixar-green bg-opacity-30 px-2 py-1 rounded">Comedy</span>
+            </div>
+          </div>
+          <span class="card-badge">Comin Soon</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+
+
+  <!-- Footer -->
+  <footer class="footer py-12 px-6 md:px-12 lg:px-24">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center space-x-2 mb-4">
+          <i class="fas fa-film text-pixar-yellow text-2xl"></i>
+          <span class="pixar-logo text-2xl font-bold bg-gradient-to-r from-pixar-yellow to-pixar-red bg-clip-text text-transparent">Pixar</span>
+        </div>
+        <p class="text-gray-300">Bringing magical stories to life through animation and imagination.</p>
+        <div class="flex space-x-4 mt-4">
+          <a href="#" class="social-icon text-white text-xl"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="social-icon text-white text-xl"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon text-white text-xl"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon text-white text-xl"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        
+    
+    
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto pt-8 mt-8 border-t border-gray-700 text-center text-gray-400">
+      <p>&copy; Pixar  Productions. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple animation for cards when they come into view
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.card');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+      
+      // Mobile menu toggle would go here
+      const mobileMenuButton = document.querySelector('button[class*="md:hidden"]');
+      mobileMenuButton.addEventListener('click', function() {
+        // Implementation for mobile menu toggle
+        console.log('Mobile menu would toggle here');
+      });
+    });
+  </script>
 </body>
 </html>
