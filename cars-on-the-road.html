@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cars on the Road | Pixar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Stream all episodes of Pixar's Cars on the Road, following Lightning McQueen and Mater on a cross-country road trip filled with adventure and friendship.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pixar-red': '#EE2E31',
+            'pixar-blue': '#1E90FF',
+            'pixar-yellow': '#FFD700',
+            'pixar-orange': '#FF8C00',
+          },
+          fontFamily: {
+            'rubik': ['Rubik', 'sans-serif'],
+            'poppins': ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 6s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rubik:wght@700;900&display=swap">
+  <style>
+    :root {
+      --primary: #EE2E31; /* Pixar red */
+      --secondary: #1E90FF; /* Pixar blue */
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #000000, #1a1a2e);
+      min-height: 100vh;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    
+    .title-font {
+      font-family: 'Rubik', sans-serif;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .episode-card {
+      transition: all 0.3s ease;
+      perspective: 1000px;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+    }
+    
+    .episode-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    }
+    
+    .episode-card:hover .episode-image {
+      transform: scale(1.05);
+    }
+    
+    .episode-image-container {
+      overflow: hidden;
+      border-radius: 12px 12px 0 0;
+      position: relative;
+    }
+    
+    .episode-image {
+      transition: transform 0.5s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .play-icon {
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(238, 46, 49, 0.7);
+    }
+    
+    .episode-card:hover .play-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+    
+    .modal-enter {
+      animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .video-header {
+      position: relative;
+      height: 80vh;
+      min-height: 600px;
+      overflow: hidden;
+    }
+    
+    .video-header video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: 0;
+      object-fit: cover;
+    }
+    
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
+      z-index: 1;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .pixar-logo {
+      width: 120px;
+      filter: drop-shadow(0 0 8px rgba(0,0,0,0.5));
+      transition: transform 0.3s ease;
+    }
+    
+    .pixar-logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .nav-container {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+      backdrop-filter: blur(5px);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(238, 46, 49, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(238, 46, 49, 0.6);
+    }
+    
+    .btn-secondary {
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .episode-badge {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%);
+      }
+      40% {
+        transform: translateY(-20px) translateX(-50%);
+      }
+      60% {
+        transform: translateY(-10px) translateX(-50%);
+      }
+    }
+    
+    .character-card {
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .character-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+    }
+    
+    .section-title {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      bottom: -5px;
+      left: 0;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 3px;
+    }
+    
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .footer-link {
+      transition: all 0.2s ease;
+    }
+    
+    .footer-link:hover {
+      color: var(--primary);
+      transform: translateX(3px);
+    }
+    
+    .road-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: repeating-linear-gradient(
+        to right,
+        #fff,
+        #fff 20px,
+        transparent 20px,
+        transparent 40px
+      );
+    }
+    
+    .tire-track {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-image: radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 60%);
+      animation: moveTire 20s linear infinite;
+    }
+    
+    @keyframes moveTire {
+      0% {
+        transform: translateX(-100px);
+      }
+      100% {
+        transform: translateX(calc(100vw + 100px));
+      }
+    }
+    
+    .tire-track:nth-child(2) {
+      top: 20px;
+      animation-delay: 2s;
+      animation-duration: 18s;
+    }
+    
+    .tire-track:nth-child(3) {
+      top: 40px;
+      animation-delay: 4s;
+      animation-duration: 22s;
+    }
+    
+    .road-bg {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #333333, #1a1a1a);
+    }
+    
+    .road-bg:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%23ffffff10" stroke-width="1"/></svg>');
+      opacity: 0.1;
+    }
+    
+    .car-icon {
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 5px rgba(238, 46, 49, 0.7));
+    }
+    
+    .car-icon:hover {
+      transform: scale(1.1) rotate(-5deg);
+    }
+    
+    .modal-overlay {
+      backdrop-filter: blur(10px);
+    }
+    
+    @media (max-width: 768px) {
+      .video-header {
+        height: 70vh;
+        min-height: 500px;
+      }
+      
+      .header-content h1 {
+        font-size: 3rem;
+      }
+      
+      .character-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body class="relative">
+  <!-- Road elements -->
+  <div class="road-bg absolute inset-0 -z-10">
+    <div class="tire-track"></div>
+    <div class="tire-track"></div>
+    <div class="tire-track"></div>
+    <div class="road-line"></div>
+  </div>
+  
+  <!-- Video Header -->
+  <div class="video-header">
+    <video autoplay muted loop playsinline poster="https://lumiere-a.akamaihd.net/v1/images/p_carsonroad_21521_6c561a6e.jpeg">
+      <source src="https://imdb-video.media-imdb.com/vi2702885401/1434659607842-pgv4ql-1659367668102.mp4?Expires=1748801266&Signature=H2Q-~v3P~EkwmHrJpGanrzXrW8iYgoX5Bj0P2VXgssSBy3OssT36bjWWhxI7b-USCDCm~IPsnYktwohAt~umXiA46uipu~caFu5KZ83JistT2kr2kLuCS-jH2KFcXyJsB2fsDsJx6sXIEOUlWQ3-YwpyQeo6u0kJrVnf75y0DFWPVEWNSvEaGWZx4EeQVAH7~MljB8Qpf-qhBTlzJNE4KlAOlKfw8-uzO3zUkozfIr21kTBShl3ozQvBMGe~aW847Wq0CvOxSMDNBMxpzkbUvYFfiZjep48POsSBVvjRJhV~ppvhYanY~ihTHNg~nb045p4vJoQJna6oR0L2hc~0jA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+    
+    <div class="header-content">
+      <!-- Navigation -->
+      <div class="nav-container py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <img src="https://images.squarespace-cdn.com/content/v1/60241cb68df65b530cd84d95/1613495438818-408JDVSTB7NWSHVC20M7/logo.png?format=1500w" alt="Pixar" class="pixar-logo">
+            <span class="text-white font-bold text-xl hidden md:block">Cars on the Road</span>
+          </div>
+
+          <nav class="hidden md:flex space-x-8">
+            <a href="#about" class="nav-link text-white hover:text-pixar-red transition">About</a>
+            <a href="#episodes" class="nav-link text-white hover:text-pixar-red transition">Episodes</a>
+            <a href="#characters" class="nav-link text-white hover:text-pixar-red transition">Characters</a>
+            <a href="#gallery" class="nav-link text-white hover:text-pixar-red transition">Gallery</a>
+          </nav>
+
+          <button class="md:hidden text-2xl text-white" id="mobile-menu-button">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+     
+
+      <!-- Title Content -->
+      <div class="container mx-auto px-4 flex-1 flex items-center">
+        <div class="max-w-4xl">
+          <div class="flex items-center mb-4">
+            <img src="https://yt3.ggpht.com/4lBlgctuLWYB0ZAAJEzaVSIjdn9knjoph7PDczzIuLR6VwFgrlVwz5tD4ALFjSlDvSlUzH36=s68-c-k-c0x00ffffff-no-rj" alt="Pixar" class="h-8 mr-4">
+            <span class="text-white font-semibold">ORIGINAL SERIES</span>
+          </div>
+          <h1 class="text-5xl md:text-7xl font-bold mb-4 gradient-text title-font tracking-tight">CARS ON THE ROAD</h1>
+          <div class="flex items-center space-x-4 mb-6">
+            <span class="bg-pixar-red text-white px-3 py-1 rounded-full text-sm font-semibold">NEW EPISODES</span>
+            <span class="text-gray-300">2022</span>
+            <span class="text-gray-300">•</span>
+            <span class="text-gray-300">9 EPISODES</span>
+            <span class="text-gray-300">•</span>
+            <span class="text-gray-300">TV-G</span>
+          </div>
+          <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+            Lightning McQueen and Mater go on a cross-country road trip to see Mater's sister.
+          </p>
+          
+          </div>
+        </div>
+      </div>
+      
+      <div class="scroll-indicator">
+        <i class="fas fa-chevron-down text-white text-2xl animate-bounce"></i>
+      </div>
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 py-16">
+    <
+    
+    <!-- Characters Section -->
+    
+    
+    <!-- Episodes Section -->
+    <section id="episodes" class="py-16">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold section-title">EPISODES</h2>
+        <div class="flex items-center space-x-2 mt-4 md:mt-0">
+          <span class="text-gray-400">SEASON</span>
+          <div class="relative">
+            <select class="bg-gray-800 border border-gray-700 text-white rounded-full px-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-pixar-red">
+              <option>1</option>
+              <option disabled>2 (Coming Soon)</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <i class="fas fa-chevron-down text-gray-400"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="episodes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+    
+    
+  </main>
+
+  <!-- Modal -->
+  <div id="playback-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-overlay">
+    <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden shadow-2xl modal-enter border-2 border-pixar-red">
+      <button id="close-modal" class="absolute top-4 right-4 z-50 text-white hover:text-pixar-red text-2xl transition bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="aspect-w-16 aspect-h-9">
+        <video id="modal-video" class="w-full" controls poster="https://lumiere-a.akamaihd.net/v1/images/p_carsonroad_21521_6c561a6e.jpeg">
+          Your browser does not support the video element.
+        </video>
+      </div>
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3 id="modal-title" class="text-2xl font-bold mb-1"></h3>
+            <div class="text-gray-400 text-sm">
+              <span>S1 • E<span id="episode-num"></span></span> • <span id="episode-runtime"></span> • <span class="text-pixar-yellow">★ <span id="episode-rating"></span></span>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <button class="text-gray-400 hover:text-white transition">
+              <i class="fas fa-share-alt"></i>
+            </button>
+            <button class="text-gray-400 hover:text-white transition">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+        </div>
+        <p id="modal-description" class="text-gray-300 mb-6"></p>
+        <div class="flex flex-wrap gap-4">
+          <button id="play-episode" class="btn-primary text-white font-bold py-3 px-8 rounded-full flex items-center transition">
+            <i class="fas fa-play mr-2"></i> PLAY EPISODE
+          </button>
+          <button class="btn-secondary text-white font-semibold py-3 px-8 rounded-full flex items-center transition">
+            <i class="fas fa-plus mr-2"></i> WATCHLIST
+          </button>
+          <button class="btn-secondary text-white font-semibold py-3 px-4 rounded-full transition">
+            <i class="fas fa-thumbs-up"></i>
+          </button>
+        </div>
+        <div class="mt-6 pt-6 border-t border-gray-800">
+          <h4 class="text-sm font-semibold text-gray-400 mb-2">STARRING</h4>
+          <p class="text-gray-300 text-sm" id="modal-cast">Owen Wilson, Larry the Cable Guy, Kerry Washington</p>
+          <h4 class="text-sm font-semibold text-gray-400 mt-4 mb-2">CREATED BY</h4>
+          <p class="text-gray-300 text-sm">Brian Fee, Steve Purcell</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Viewer Modal -->
+  <div id="image-viewer" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90 p-4">
+    <div class="relative max-w-6xl max-h-screen">
+      <button id="close-image-viewer" class="absolute top-4 right-4 z-50 text-white hover:text-pixar-red text-2xl transition bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
+        <i class="fas fa-times"></i>
+      </button>
+      <img id="viewed-image" src="" alt="" class="max-w-full max-h-screen">
+    </div>
+  </div>
+
+  <footer class="bg-gray-900 py-12 border-t border-gray-800 relative overflow-hidden">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-8 md:mb-0">
+          <img src="https://images.squarespace-cdn.com/content/v1/60241cb68df65b530cd84d95/1613495438818-408JDVSTB7NWSHVC20M7/logo.png?format=1500w" alt="Pixar" class="h-12 mb-4">
+         
+        </div>
+        
+        
+            <div class="flex space-x-4 mb-6">
+              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-facebook"></i></a>
+              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-youtube"></i></a>
+            </div>
+           
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2022 Pixar. All Rights Reserved.</p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Terms of Use</a>
+          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Animated road elements in footer -->
+    <div class="absolute bottom-0 left-0 right-0 h-4 bg-gray-800">
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
+        <div class="absolute top-0 left-0 h-full w-8 bg-pixar-yellow animate-[moveRight_2s_linear_infinite]"></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const episodes = [
+      { 
+        title: "Dino Park", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/a83R6vXXHnJnzaJpfwc4cHruKPk.jpg",
+        runtime: "10 min",
+        rating: "8.2/10",
+        description: "A dino park visit turns into a pulse-pounding, prehistoric nightmare starring Mater and Lightning.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "Lights Out", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/ldmJXyvMxBu2fa0B9L5jZDZUw2t.jpg",
+        runtime: "9 min",
+        rating: "8.4/10",
+        description: "Mater gets cast in a low-budget monster movie, with Lightning reluctantly along for the ride.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "Salt Fever", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/40TNl5j2FZ95u7bhvNqPwHdIvj0.jpg",
+        runtime: "8 min",
+        rating: "8.6/10",
+        description: "When Mater is outfitted as a racer, he experiences record speeds and an out-of-chassis experience.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "The Legend", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/1Tnq7CWZOxjwP0vzwYwRZc9Dj3B.jpg",
+        runtime: "9 min",
+        rating: "8.8/10",
+        description: "Mater tells the story of a legendary truck that may or may not be real, as they travel through trucker country.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "Show Time", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/cVLZOjIA9aK90Wti67e3RUAOCbZ.jpg",
+        runtime: "10 min",
+        rating: "9.0/10",
+        description: "Lightning and Mater get roped into performing in a traveling circus show.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "Trucks", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/3z8cyW0N6gOblFZVizfyRxO5aq7.jpg",
+        runtime: "9 min",
+        rating: "9.2/10",
+        description: "A stop at a trucker diner leads to an unexpected encounter with Mater's past.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy, Kerry Washington"
+      },
+      { 
+        title: "B-Movie", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/yfZEQC2D6w5pHRsD7oAFtknB7lY.jpg",
+        runtime: "10 min",
+        rating: "8.4/10",
+        description: "Mater gets roped into being part of a wedding procession, with hilarious results.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy"
+      },
+      { 
+        title: "Road Rumblers", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/7SaEhvz3aZaaK0GtNSBy3OctxG3.jpg",
+        runtime: "9 min",
+        rating: "9.4/10",
+        description: "Lightning and Mater finally reach their destination, where Mater reunites with his sister.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy, Kerry Washington"
+      },
+      { 
+        title: "Gettin' Hitched", 
+        year: 2022,
+        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/magIv71REHj30RQtw44EL6wHNb8.jpg",
+        runtime: "9 min",
+        rating: "9.4/10",
+        description: "Lightning and Mater finally reach their destination, where Mater reunites with his sister.",
+        animators: "Brian Fee, Steve Purcell",
+        music: "Jake Monaco",
+        cast: "Owen Wilson, Larry the Cable Guy, Kerry Washington"
+      }
+    ];
+
+    // DOM Elements
+    const container = document.getElementById('episodes-container');
+    const playbackModal = document.getElementById('playback-modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalVideo = document.getElementById('modal-video');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const episodeNum = document.getElementById('episode-num');
+    const episodeRuntime = document.getElementById('episode-runtime');
+    const episodeRating = document.getElementById('episode-rating');
+    const episodeCast = document.getElementById('modal-cast');
+    const playEpisodeBtn = document.getElementById('play-episode');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const imageViewer = document.getElementById('image-viewer');
+    const closeImageViewer = document.getElementById('close-image-viewer');
+    const viewedImage = document.getElementById('viewed-image');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    // Mobile menu toggle
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Gallery image click handler
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const imgSrc = item.querySelector('img').src;
+        viewedImage.src = imgSrc;
+        viewedImage.alt = item.querySelector('img').alt;
+        imageViewer.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close image viewer
+    closeImageViewer.addEventListener('click', () => {
+      imageViewer.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+
+    // Close image viewer when clicking outside
+    imageViewer.addEventListener('click', (e) => {
+      if (e.target === imageViewer) {
+        imageViewer.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+
+    function openModal(episode, episodeNumber) {
+      modalTitle.textContent = episode.title;
+      modalDescription.textContent = episode.description;
+      episodeNum.textContent = episodeNumber;
+      episodeRuntime.textContent = episode.runtime;
+      episodeRating.textContent = episode.rating;
+      episodeCast.textContent = episode.cast;
+      
+      // Set video source
+      modalVideo.src = episode.video;
+      modalVideo.poster = episode.image;
+
+      playbackModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      // Play the video when Play Episode button is clicked
+      playEpisodeBtn.addEventListener('click', () => {
+        modalVideo.play();
+      });
+    }
+
+    function closeModalHandler() {
+      playbackModal.classList.add('hidden');
+      modalVideo.pause();
+      modalVideo.currentTime = 0;
+      document.body.style.overflow = '';
+    }
+
+    closeModal.addEventListener('click', closeModalHandler);
+
+    // Close modal when clicking outside
+    playbackModal.addEventListener('click', (e) => {
+      if (e.target === playbackModal) {
+        closeModalHandler();
+      }
+    });
+
+    // Render episode cards
+    episodes.forEach((episode, index) => {
+      const card = document.createElement('div');
+      card.className = 'episode-card bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition';
+      card.innerHTML = `
+        <div class="episode-image-container relative">
+          <img src="${episode.image}" alt="${episode.title}" class="episode-image w-full h-48 object-cover">
+          <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition">
+            <div class="play-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-pixar-red bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center opacity-0 transition">
+              <i class="fas fa-play text-white"></i>
+            </div>
+          </div>
+          <span class="absolute top-2 right-2 episode-badge text-white text-xs px-2 py-1 rounded">${episode.runtime}</span>
+        </div>
+        <div class="p-4">
+          <div class="flex justify-between items-start mb-1">
+            <h2 class="font-semibold">${episode.title}</h2>
+            <span class="text-pixar-yellow text-sm">${episode.rating}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-400">Episode ${index + 1}</p>
+            <button class="text-gray-400 hover:text-pixar-red transition">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        openModal(episode, index + 1);
+      });
+      container.appendChild(card);
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Make video header play/pause on hover
+    const headerVideo = document.querySelector('.video-header video');
+    
+    // Autoplay is handled by the autoplay attribute, but we'll ensure it plays
+    headerVideo.play().catch(e => {
+      console.log("Autoplay prevented, showing fallback");
+    });
+    
+    // Add animation to road elements
+    function createRoadElements() {
+      const roadBg = document.querySelector('.road-bg');
+      for (let i = 0; i < 5; i++) {
+        const tire = document.createElement('div');
+        tire.className = 'tire-track';
+        tire.style.top = `${Math.random() * 50}px`;
+        tire.style.animationDuration = `${15 + Math.random() * 10}s`;
+        tire.style.animationDelay = `${Math.random() * 5}s`;
+        roadBg.appendChild(tire);
+      }
+    }
+    
+    createRoadElements();
+  </script>
+</body>
+</
+</html>
