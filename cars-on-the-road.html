@@ -2,586 +2,462 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cars on the Road | Pixar</title>
+  <title>Cars on the Road | PIXAR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Stream all episodes of Pixar's Cars on the Road, following Lightning McQueen and Mater on a cross-country road trip filled with adventure and friendship.">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'pixar-red': '#EE2E31',
-            'pixar-blue': '#1E90FF',
-            'pixar-yellow': '#FFD700',
-            'pixar-orange': '#FF8C00',
-          },
-          fontFamily: {
-            'rubik': ['Rubik', 'sans-serif'],
-            'poppins': ['Poppins', 'sans-serif'],
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'spin-slow': 'spin 6s linear infinite',
-          }
-        }
-      }
-    }
-  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rubik:wght@700;900&display=swap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marvel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- HLS.js (from Tukaram for HLS playback support) -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.1/dist/hls.min.js"></script>
+
   <style>
-    :root {
-      --primary: #EE2E31; /* Pixar red */
-      --secondary: #1E90FF; /* Pixar blue */
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #111;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ffcc00;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ffdd33;
     }
     
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom, #000000, #1a1a2e);
-      min-height: 100vh;
-      color: #fff;
-      scroll-behavior: smooth;
+    /* Custom animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
-    .title-font {
-      font-family: 'Rubik', sans-serif;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
     
-    .episode-card {
-      transition: all 0.3s ease;
-      perspective: 1000px;
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
     }
     
-    .episode-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
     }
     
-    .episode-card:hover .episode-image {
-      transform: scale(1.05);
+    .pulse-hover:hover {
+      animation: pulse 1.5s infinite;
     }
     
-    .episode-image-container {
-      overflow: hidden;
-      border-radius: 12px 12px 0 0;
+    .arrow-bounce {
+      animation: arrowBounce 2s infinite;
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    
+    /* Glow effect */
+    .glow-effect {
       position: relative;
+      transition: transform 0.3s ease;
     }
     
-    .episode-image {
-      transition: transform 0.5s ease;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .glow-effect:hover {
+      transform: translateY(-5px);
     }
     
-    .play-icon {
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px rgba(238, 46, 49, 0.7);
+    .glow-effect::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0);
+      transition: box-shadow 0.3s ease;
+      pointer-events: none;
     }
     
-    .episode-card:hover .play-icon {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.2);
+    .glow-effect:hover::after {
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.7);
     }
     
+    /* Gradient text */
     .gradient-text {
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      background: linear-gradient(90deg, #ffcc00, #ff9900);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
     
-    .gradient-bg {
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    /* Custom fonts */
+    .marvel-font {
+      font-family: 'Marvel', sans-serif;
     }
     
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .movie-card {
+        width: calc(50% - 1rem);
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .movie-card {
+        width: 100%;
+      }
+    }
+    
+    /* Custom modal transition */
     .modal-enter {
-      animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      opacity: 0;
+      transform: scale(0.95);
     }
     
-    @keyframes modalEnter {
-      from {
-        opacity: 0;
-        transform: scale(0.9) translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
+    .modal-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 300ms, transform 300ms;
     }
     
-    .video-header {
+    .modal-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .modal-exit-active {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 300ms, transform 300ms;
+    }
+    
+    /* Custom progress bar */
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
       position: relative;
-      height: 80vh;
-      min-height: 600px;
-      overflow: hidden;
     }
     
-    .video-header video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      z-index: 0;
-      object-fit: cover;
-    }
-    
-    .video-overlay {
+    .progress-bar-fill {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
-      z-index: 1;
-    }
-    
-    .header-content {
-      position: relative;
-      z-index: 2;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .pixar-logo {
-      width: 120px;
-      filter: drop-shadow(0 0 8px rgba(0,0,0,0.5));
-      transition: transform 0.3s ease;
-    }
-    
-    .pixar-logo:hover {
-      transform: scale(1.05);
-    }
-    
-    .nav-container {
-      background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-      backdrop-filter: blur(5px);
-    }
-    
-    .nav-link {
-      position: relative;
-    }
-    
-    .nav-link:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -2px;
-      left: 0;
-      background: var(--primary);
+      background: #ffcc00;
       transition: width 0.3s ease;
     }
     
-    .nav-link:hover:after {
-      width: 100%;
+    /* Custom tooltip */
+    .tooltip {
+      position: relative;
     }
     
-    .btn-primary {
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(238, 46, 49, 0.4);
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(238, 46, 49, 0.6);
-    }
-    
-    .btn-secondary {
-      transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-    }
-    
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-    
-    .episode-badge {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-    }
-    
-    .scroll-indicator {
+    .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
       position: absolute;
-      bottom: 30px;
+      z-index: 1;
+      bottom: 125%;
       left: 50%;
       transform: translateX(-50%);
-      animation: bounce 2s infinite;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
     
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0) translateX(-50%);
-      }
-      40% {
-        transform: translateY(-20px) translateX(-50%);
-      }
-      60% {
-        transform: translateY(-10px) translateX(-50%);
-      }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
     }
     
-    .character-card {
-      transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(5px);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    
-    .character-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
-    }
-    
-    .section-title {
+    /* Custom checkbox for watchlist */
+    .watchlist-checkbox {
       position: relative;
       display: inline-block;
+      width: 20px;
+      height: 20px;
     }
     
-    .section-title:after {
-      content: '';
+    .watchlist-checkbox input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .watchlist-checkbox .checkmark {
       position: absolute;
-      width: 50%;
-      height: 3px;
-      bottom: -5px;
+      top: 0;
       left: 0;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: 3px;
+      height: 20px;
+      width: 20px;
+      background-color: transparent;
+      border: 2px solid #ffcc00;
+      border-radius: 4px;
+      transition: all 0.3s;
     }
     
-    .testimonial-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
+    .watchlist-checkbox input:checked ~ .checkmark {
+      background-color: #ffcc00;
     }
     
-    .testimonial-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-    
-    .footer-link {
-      transition: all 0.2s ease;
-    }
-    
-    .footer-link:hover {
-      color: var(--primary);
-      transform: translateX(3px);
-    }
-    
-    .road-line {
+    .watchlist-checkbox .checkmark:after {
+      content: "";
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: repeating-linear-gradient(
-        to right,
-        #fff,
-        #fff 20px,
-        transparent 20px,
-        transparent 40px
-      );
+      display: none;
     }
     
-    .tire-track {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      background-image: radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 60%);
-      animation: moveTire 20s linear infinite;
+    .watchlist-checkbox input:checked ~ .checkmark:after {
+      display: block;
     }
     
-    @keyframes moveTire {
-      0% {
-        transform: translateX(-100px);
-      }
-      100% {
-        transform: translateX(calc(100vw + 100px));
-      }
+    .watchlist-checkbox .checkmark:after {
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid black;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
     }
-    
-    .tire-track:nth-child(2) {
-      top: 20px;
-      animation-delay: 2s;
-      animation-duration: 18s;
-    }
-    
-    .tire-track:nth-child(3) {
-      top: 40px;
-      animation-delay: 4s;
-      animation-duration: 22s;
-    }
-    
-    .road-bg {
+
+    /* Tukaram-style flexible modal player container */
+    #modal-player {
       position: relative;
-      overflow: hidden;
-      background: linear-gradient(to bottom, #333333, #1a1a1a);
+      padding-bottom: 56.25%;
+      height: 0;
+      background: black;
     }
-    
-    .road-bg:before {
-      content: '';
+    #modal-player video,
+    #modal-player iframe {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%23ffffff10" stroke-width="1"/></svg>');
-      opacity: 0.1;
-    }
-    
-    .car-icon {
-      transition: all 0.3s ease;
-      filter: drop-shadow(0 0 5px rgba(238, 46, 49, 0.7));
-    }
-    
-    .car-icon:hover {
-      transform: scale(1.1) rotate(-5deg);
-    }
-    
-    .modal-overlay {
-      backdrop-filter: blur(10px);
-    }
-    
-    @media (max-width: 768px) {
-      .video-header {
-        height: 70vh;
-        min-height: 500px;
-      }
-      
-      .header-content h1 {
-        font-size: 3rem;
-      }
-      
-      .character-card {
-        flex-direction: column;
-        text-align: center;
-      }
+      background: black;
     }
   </style>
 </head>
-<body class="relative">
-  <!-- Road elements -->
-  <div class="road-bg absolute inset-0 -z-10">
-    <div class="tire-track"></div>
-    <div class="tire-track"></div>
-    <div class="tire-track"></div>
-    <div class="road-line"></div>
-  </div>
-  
-  <!-- Video Header -->
-  <div class="video-header">
-    <video autoplay muted loop playsinline poster="https://lumiere-a.akamaihd.net/v1/images/p_carsonroad_21521_6c561a6e.jpeg">
-      <source src="https://imdb-video.media-imdb.com/vi2702885401/1434659607842-pgv4ql-1659367668102.mp4?Expires=1748801266&Signature=H2Q-~v3P~EkwmHrJpGanrzXrW8iYgoX5Bj0P2VXgssSBy3OssT36bjWWhxI7b-USCDCm~IPsnYktwohAt~umXiA46uipu~caFu5KZ83JistT2kr2kLuCS-jH2KFcXyJsB2fsDsJx6sXIEOUlWQ3-YwpyQeo6u0kJrVnf75y0DFWPVEWNSvEaGWZx4EeQVAH7~MljB8Qpf-qhBTlzJNE4KlAOlKfw8-uzO3zUkozfIr21kTBShl3ozQvBMGe~aW847Wq0CvOxSMDNBMxpzkbUvYFfiZjep48POsSBVvjRJhV~ppvhYanY~ihTHNg~nb045p4vJoQJna6oR0L2hc~0jA__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div class="video-overlay"></div>
-    
-    <div class="header-content">
-      <!-- Navigation -->
-      <div class="nav-container py-4 px-6">
-        <div class="container mx-auto flex justify-between items-center">
-          <div class="flex items-center space-x-4">
-            <img src="https://images.squarespace-cdn.com/content/v1/60241cb68df65b530cd84d95/1613495438818-408JDVSTB7NWSHVC20M7/logo.png?format=1500w" alt="Pixar" class="pixar-logo">
-            <span class="text-white font-bold text-xl hidden md:block">Cars on the Road</span>
-          </div>
-
-          <nav class="hidden md:flex space-x-8">
-            <a href="#about" class="nav-link text-white hover:text-pixar-red transition">About</a>
-            <a href="#episodes" class="nav-link text-white hover:text-pixar-red transition">Episodes</a>
-            <a href="#characters" class="nav-link text-white hover:text-pixar-red transition">Characters</a>
-            <a href="#gallery" class="nav-link text-white hover:text-pixar-red transition">Gallery</a>
-          </nav>
-
-          <button class="md:hidden text-2xl text-white" id="mobile-menu-button">
-            <i class="fas fa-bars"></i>
-          </button>
+<body class="bg-black text-gray-100 min-h-screen font-roboto">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm border-b border-yellow-600/20 shadow-lg">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center pulse-hover">
+          <i class="fas fa-bullseye text-black text-xl"></i>
         </div>
-      </div>
-
-     
-
-      <!-- Title Content -->
-      <div class="container mx-auto px-4 flex-1 flex items-center">
-        <div class="max-w-4xl">
-          <div class="flex items-center mb-4">
-            <img src="https://yt3.ggpht.com/4lBlgctuLWYB0ZAAJEzaVSIjdn9knjoph7PDczzIuLR6VwFgrlVwz5tD4ALFjSlDvSlUzH36=s68-c-k-c0x00ffffff-no-rj" alt="Pixar" class="h-8 mr-4">
-            <span class="text-white font-semibold">ORIGINAL SERIES</span>
-          </div>
-          <h1 class="text-5xl md:text-7xl font-bold mb-4 gradient-text title-font tracking-tight">CARS ON THE ROAD</h1>
-          <div class="flex items-center space-x-4 mb-6">
-            <span class="bg-pixar-red text-white px-3 py-1 rounded-full text-sm font-semibold">NEW EPISODES</span>
-            <span class="text-gray-300">2022</span>
-            <span class="text-gray-300">•</span>
-            <span class="text-gray-300">9 EPISODES</span>
-            <span class="text-gray-300">•</span>
-            <span class="text-gray-300">TV-G</span>
-          </div>
-          <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
-            Lightning McQueen and Mater go on a cross-country road trip to see Mater's sister.
-          </p>
-          
-          </div>
-        </div>
+        <h1 class="text-2xl font-bold gradient-text marvel-font tracking-wide">Cars on the Road</h1>
       </div>
       
-      <div class="scroll-indicator">
-        <i class="fas fa-chevron-down text-white text-2xl animate-bounce"></i>
+      <div class="flex items-center space-x-4">
+        <button id="watchlist-btn" class="tooltip p-2 rounded-full hover:bg-gray-800 transition relative">
+          <i class="fas fa-bookmark text-yellow-500"></i>
+          <span class="tooltip-text">My Watchlist</span>
+        </button>
+        <button id="theme-toggle" class="tooltip p-2 rounded-full hover:bg-gray-800 transition">
+          <i class="fas fa-moon text-yellow-500"></i>
+          <span class="tooltip-text">Toggle Theme</span>
+        </button>
+        <button id="search-btn" class="tooltip p-2 rounded-full hover:bg-gray-800 transition">
+          <i class="fas fa-search text-yellow-500"></i>
+          <span class="tooltip-text">Search</span>
+        </button>
       </div>
     </div>
-  </div>
+    
+    <!-- Search Bar (hidden by default) -->
+    <div id="search-bar" class="hidden px-4 pb-4 bg-black/80">
+      <div class="relative">
+        <input type="text" placeholder="Search episodes..." 
+               class="w-full bg-gray-900 border border-yellow-600/30 rounded-full py-2 px-4 pl-10 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent placeholder-gray-400">
+        <i class="fas fa-search absolute left-3 top-3 text-yellow-500"></i>
+      </div>
+    </div>
+    
+    <!-- Watchlist dropdown (hidden by default) -->
+    <div id="watchlist-dropdown" class="hidden absolute right-4 mt-2 w-64 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50 py-2">
+      <div class="px-4 py-2 border-b border-gray-700">
+        <h3 class="font-semibold text-yellow-500">My Watchlist</h3>
+      </div>
+      <div id="watchlist-items" class="max-h-60 overflow-y-auto">
+        <!-- Watchlist items will be added here -->
+        <div class="px-4 py-3 text-center text-gray-400">Your watchlist is empty</div>
+      </div>
+    </div>
+  </header>
 
-  <main class="container mx-auto px-4 py-16">
-    <
+  <!-- Main Content -->
+<main class="container mx-auto px-4 py-6">
+  <!-- Hero Section -->
+  <section class="mb-12 relative overflow-hidden rounded-xl shadow-2xl">
+    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
     
-    <!-- Characters Section -->
+    <div class="relative w-full h-[400px] md:h-[500px] overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+    <iframe
+      src="https://www.youtube.com/embed/-Vui-DhwIAg?autoplay=1&mute=1&loop=1&controls=0&playlist=-Vui-DhwIAg"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      class="absolute top-1/2 left-1/2 w-[177.78vh] h-[100vh] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+    ></iframe>
+  </div>
     
+    <div class="absolute bottom-0 left-0 z-20 p-6 md:p-8">
+      <div class="flex items-center mb-2">
+        <span class="bg-yellow-600 text-black text-xs font-bold px-2 py-1 rounded mr-2"></span>
+        <span class="text-yellow-500 text-sm">Season 1 • 2022</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold mb-2 gradient-text marvel-font tracking-wide">Cars on the Road</h2>
+      <div class="flex items-center mb-4">
+        <div class="flex items-center mr-4">
+          <i class="fas fa-star text-yellow-500 mr-1"></i>
+          <span class="text-white">8.8</span>
+        </div>
+        <span class="text-gray-300 text-sm mr-4">TV-14</span>
+        <span class="text-gray-300 text-sm">9 Episodes</span>
+      </div>
+      <p class="text-gray-300 mb-4 max-w-lg text-sm md:text-base">Lightning McQueen and Mater go on a cross-country road trip to see Mater's sister.</p>
+      <div class="flex space-x-3">
+        <button class="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold py-2 px-6 rounded-full transition flex items-center pulse-hover">
+          <i class="fas fa-play mr-2"></i> Play All
+        </button>
+        <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-full transition flex items-center">
+          <i class="fas fa-info-circle mr-2"></i> Details
+        </button>
+      </div>
+    </div>
+    <div class="absolute bottom-4 right-4 z-20">
+      <button id="scroll-down" class="bg-black/50 text-yellow-500 rounded-full p-2 border border-yellow-500/30 hover:bg-yellow-500 hover:text-black transition">
+        <i class="fas fa-chevron-down arrow-bounce"></i>
+      </button>
+    </div>
+  </section>
+</main>
+
+
+    <!-- Season Navigation -->
+    <div class="flex items-center justify-between mb-8 border-b border-gray-800 pb-4 container mx-auto px-4">
+      <h3 class="text-xl font-semibold flex items-center">
+        <i class="fas fa-tv text-yellow-500 mr-2"></i>
+        <span class="marvel-font">EPISODES</span>
+      </h3>
+      <div class="flex items-center space-x-2">
+        <button class="season-btn active bg-yellow-600 text-black px-3 py-1 rounded-full text-xs font-medium">Season 1</button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap items-center justify-between mb-8 gap-4 container mx-auto px-4">
+      <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+      
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-400 text-sm">Sort by:</span>
+        <select class="bg-gray-900 border border-gray-700 text-white text-sm rounded-full px-3 py-1 focus:outline-none focus:ring-1 focus:ring-yellow-500">
+          <option>Release Date</option>
+          <option>Episode Order</option>
+          <option>Popularity</option>
+          <option>Duration</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Episodes Grid -->
+    <section class="container mx-auto px-4">
+      <div id="movies" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <!-- Movie cards will be inserted here by JavaScript -->
+      </div>
+    </section>
+
     
-    <!-- Episodes Section -->
-    <section id="episodes" class="py-16">
-      <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-        <h2 class="text-3xl md:text-4xl font-bold section-title">EPISODES</h2>
-        <div class="flex items-center space-x-2 mt-4 md:mt-0">
-          <span class="text-gray-400">SEASON</span>
-          <div class="relative">
-            <select class="bg-gray-800 border border-gray-700 text-white rounded-full px-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-pixar-red">
-              <option>1</option>
-              <option disabled>2 (Coming Soon)</option>
-            </select>
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <i class="fas fa-chevron-down text-gray-400"></i>
-            </div>
-          </div>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-gray-800 mt-8 pt-6 text-center text-gray-500">
+    <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/stark_4152" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/channel/UCYwTAs1PRVHbq4LnCHEEicw" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-youtube"></i></a>
+    </div>
+
+
+  <!-- Playback Modal (Tukaram-style flexible player inside Hawkeye UI) -->
+  <div id="playback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 transition-opacity duration-300">
+    <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden shadow-2xl transform transition-all duration-300 scale-95">
+      <button id="close-modal" class="absolute top-4 right-4 z-50 text-white hover:text-yellow-500 text-2xl bg-black/50 rounded-full p-2 transition">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="relative">
+        <!-- Flexible player container: video or iframe will be injected here -->
+        <div id="modal-player">
+          <video id="modal-video" class="w-full" controls playsinline>
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div id="video-progress" class="progress-bar w-full">
+          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
         </div>
       </div>
       
-      <div id="episodes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    </section>
-    
-    
-  </main>
-
-  <!-- Modal -->
-  <div id="playback-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-overlay">
-    <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden shadow-2xl modal-enter border-2 border-pixar-red">
-      <button id="close-modal" class="absolute top-4 right-4 z-50 text-white hover:text-pixar-red text-2xl transition bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
-        <i class="fas fa-times"></i>
-      </button>
-      <div class="aspect-w-16 aspect-h-9">
-        <video id="modal-video" class="w-full" controls poster="https://lumiere-a.akamaihd.net/v1/images/p_carsonroad_21521_6c561a6e.jpeg">
-          Your browser does not support the video element.
-        </video>
-      </div>
       <div class="p-6">
         <div class="flex justify-between items-start mb-4">
           <div>
             <h3 id="modal-title" class="text-2xl font-bold mb-1"></h3>
-            <div class="text-gray-400 text-sm">
-              <span>S1 • E<span id="episode-num"></span></span> • <span id="episode-runtime"></span> • <span class="text-pixar-yellow">★ <span id="episode-rating"></span></span>
+            <div class="flex items-center text-gray-400 text-sm">
+              <span>S1 • E<span id="episode-num"></span></span>
+              <span class="mx-2">•</span>
+              <span id="modal-duration">45 min</span>
             </div>
           </div>
-          <div class="flex space-x-3">
-            <button class="text-gray-400 hover:text-white transition">
-              <i class="fas fa-share-alt"></i>
-            </button>
-            <button class="text-gray-400 hover:text-white transition">
-              <i class="fas fa-ellipsis-h"></i>
-            </button>
-          </div>
+          <label class="watchlist-checkbox">
+            <input type="checkbox" id="watchlist-checkbox">
+            <span class="checkmark"></span>
+          </label>
         </div>
-        <p id="modal-description" class="text-gray-300 mb-6"></p>
-        <div class="flex flex-wrap gap-4">
-          <button id="play-episode" class="btn-primary text-white font-bold py-3 px-8 rounded-full flex items-center transition">
-            <i class="fas fa-play mr-2"></i> PLAY EPISODE
+        
+        <p id="modal-description" class="text-gray-300 mb-6">
+          Loading description...
+        </p>
+        
+        <div class="flex space-x-3">
+          <button id="play-btn" class="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold py-2 px-6 rounded-full transition flex items-center">
+            <i class="fas fa-play mr-2"></i> Play
           </button>
-          <button class="btn-secondary text-white font-semibold py-3 px-8 rounded-full flex items-center transition">
-            <i class="fas fa-plus mr-2"></i> WATCHLIST
+          <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-full transition flex items-center">
+            <i class="fas fa-info-circle mr-2"></i> Details
           </button>
-          <button class="btn-secondary text-white font-semibold py-3 px-4 rounded-full transition">
-            <i class="fas fa-thumbs-up"></i>
-          </button>
-        </div>
-        <div class="mt-6 pt-6 border-t border-gray-800">
-          <h4 class="text-sm font-semibold text-gray-400 mb-2">STARRING</h4>
-          <p class="text-gray-300 text-sm" id="modal-cast">Owen Wilson, Larry the Cable Guy, Kerry Washington</p>
-          <h4 class="text-sm font-semibold text-gray-400 mt-4 mb-2">CREATED BY</h4>
-          <p class="text-gray-300 text-sm">Brian Fee, Steve Purcell</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Image Viewer Modal -->
-  <div id="image-viewer" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90 p-4">
-    <div class="relative max-w-6xl max-h-screen">
-      <button id="close-image-viewer" class="absolute top-4 right-4 z-50 text-white hover:text-pixar-red text-2xl transition bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">
-        <i class="fas fa-times"></i>
-      </button>
-      <img id="viewed-image" src="" alt="" class="max-w-full max-h-screen">
-    </div>
+  <!-- Loading Spinner -->
+  <div id="loading-spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 hidden">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-yellow-500"></div>
   </div>
-
-  <footer class="bg-gray-900 py-12 border-t border-gray-800 relative overflow-hidden">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between">
-        <div class="mb-8 md:mb-0">
-          <img src="https://images.squarespace-cdn.com/content/v1/60241cb68df65b530cd84d95/1613495438818-408JDVSTB7NWSHVC20M7/logo.png?format=1500w" alt="Pixar" class="h-12 mb-4">
-         
-        </div>
-        
-        
-            <div class="flex space-x-4 mb-6">
-              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-twitter"></i></a>
-              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-facebook"></i></a>
-              <a href="#" class="text-gray-400 hover:text-pixar-red transition text-xl"><i class="fab fa-youtube"></i></a>
-            </div>
-           
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2022 Pixar. All Rights Reserved.</p>
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Privacy Policy</a>
-          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Terms of Use</a>
-          <a href="#" class="text-gray-400 hover:text-pixar-red text-sm">Cookie Policy</a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Animated road elements in footer -->
-    <div class="absolute bottom-0 left-0 right-0 h-4 bg-gray-800">
-      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
-        <div class="absolute top-0 left-0 h-full w-8 bg-pixar-yellow animate-[moveRight_2s_linear_infinite]"></div>
-      </div>
-    </div>
-  </footer>
 
   <script>
-    const episodes = [
+    // Enhanced movie data with more details
+    const movies = [
       { 
         title: "Dino Park", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sdqm.greenpulseventures.store/v4/ic/hj81o/index-f2-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/a83R6vXXHnJnzaJpfwc4cHruKPk.jpg",
         runtime: "10 min",
         rating: "8.2/10",
@@ -593,7 +469,7 @@
       { 
         title: "Lights Out", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://spuc.zenitharchitecture.site:443/v4/9a/j1ysa/index-f2-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/ldmJXyvMxBu2fa0B9L5jZDZUw2t.jpg",
         runtime: "9 min",
         rating: "8.4/10",
@@ -605,7 +481,7 @@
       { 
         title: "Salt Fever", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sbi6.dreamoraacademy.site:443/v4/ic/cbm9f/index-f2-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/40TNl5j2FZ95u7bhvNqPwHdIvj0.jpg",
         runtime: "8 min",
         rating: "8.6/10",
@@ -617,7 +493,7 @@
       { 
         title: "The Legend", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sxic.stellarforgeinnovation.online/v4/sc/nzfhw/index-f2-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/1Tnq7CWZOxjwP0vzwYwRZc9Dj3B.jpg",
         runtime: "9 min",
         rating: "8.8/10",
@@ -629,7 +505,7 @@
       { 
         title: "Show Time", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sh9f.symphoniaevents.sbs/v4/ic/qfbpy/index-f1-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/cVLZOjIA9aK90Wti67e3RUAOCbZ.jpg",
         runtime: "10 min",
         rating: "9.0/10",
@@ -641,7 +517,7 @@
       { 
         title: "Trucks", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://s8v3.driftmindfinancials.cyou/v4/ic/mud5r/index-f1-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/3z8cyW0N6gOblFZVizfyRxO5aq7.jpg",
         runtime: "9 min",
         rating: "9.2/10",
@@ -653,7 +529,7 @@
       { 
         title: "B-Movie", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://shh.mindspirecreative.space/v4/x68/fvinr9/cf-master.txt?v=1762105459", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/yfZEQC2D6w5pHRsD7oAFtknB7lY.jpg",
         runtime: "10 min",
         rating: "8.4/10",
@@ -665,7 +541,7 @@
       { 
         title: "Road Rumblers", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sr81.torinaworks.shop/v4/36/p83yw/index-f1-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/7SaEhvz3aZaaK0GtNSBy3OctxG3.jpg",
         runtime: "9 min",
         rating: "9.4/10",
@@ -677,7 +553,7 @@
       { 
         title: "Gettin' Hitched", 
         year: 2022,
-        video: "https://videos.contentstack.com/v3/assets/blt6dc4e7109b4b4127/blt4d0e1c0bdc1d6c8a/631e1c4a1a3b0e0f8a3e5f2b/Cars_on_the_Road_Clip_1_16x9.mp4", 
+        video: "https://sxix.stellarpathholdings.sbs/v4/ic/v6edo/index-f2-v1-a1.txt", 
         image: "https://wsrv.nl/?url=https://image.tmdb.org/t/p/original/magIv71REHj30RQtw44EL6wHNb8.jpg",
         runtime: "9 min",
         rating: "9.4/10",
@@ -688,166 +564,399 @@
       }
     ];
 
-    // DOM Elements
-    const container = document.getElementById('episodes-container');
+    // DOM elements
+    const container = document.getElementById('movies');
+    const searchBtn = document.getElementById('search-btn');
+    const searchBar = document.getElementById('search-bar');
+    const themeToggle = document.getElementById('theme-toggle');
+    const watchlistBtn = document.getElementById('watchlist-btn');
+    const watchlistDropdown = document.getElementById('watchlist-dropdown');
+    const watchlistItems = document.getElementById('watchlist-items');
     const playbackModal = document.getElementById('playback-modal');
     const closeModal = document.getElementById('close-modal');
-    const modalVideo = document.getElementById('modal-video');
     const modalTitle = document.getElementById('modal-title');
     const modalDescription = document.getElementById('modal-description');
     const episodeNum = document.getElementById('episode-num');
-    const episodeRuntime = document.getElementById('episode-runtime');
-    const episodeRating = document.getElementById('episode-rating');
-    const episodeCast = document.getElementById('modal-cast');
-    const playEpisodeBtn = document.getElementById('play-episode');
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const imageViewer = document.getElementById('image-viewer');
-    const closeImageViewer = document.getElementById('close-image-viewer');
-    const viewedImage = document.getElementById('viewed-image');
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modalDuration = document.getElementById('modal-duration');
+    const playBtn = document.getElementById('play-btn');
+    const watchlistCheckbox = document.getElementById('watchlist-checkbox');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const scrollDownBtn = document.getElementById('scroll-down');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const seasonBtns = document.querySelectorAll('.season-btn');
+    const modalPlayer = document.getElementById('modal-player');
 
-    // Mobile menu toggle
-    mobileMenuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
+    // Current HLS instance and current movie index
+    let currentHls = null;
+    let currentMovieIndex = null;
 
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-      });
-    });
-
-    // Gallery image click handler
-    galleryItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const imgSrc = item.querySelector('img').src;
-        viewedImage.src = imgSrc;
-        viewedImage.alt = item.querySelector('img').alt;
-        imageViewer.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-
-    // Close image viewer
-    closeImageViewer.addEventListener('click', () => {
-      imageViewer.classList.add('hidden');
-      document.body.style.overflow = '';
-    });
-
-    // Close image viewer when clicking outside
-    imageViewer.addEventListener('click', (e) => {
-      if (e.target === imageViewer) {
-        imageViewer.classList.add('hidden');
-        document.body.style.overflow = '';
-      }
-    });
-
-    function openModal(episode, episodeNumber) {
-      modalTitle.textContent = episode.title;
-      modalDescription.textContent = episode.description;
-      episodeNum.textContent = episodeNumber;
-      episodeRuntime.textContent = episode.runtime;
-      episodeRating.textContent = episode.rating;
-      episodeCast.textContent = episode.cast;
-      
-      // Set video source
-      modalVideo.src = episode.video;
-      modalVideo.poster = episode.image;
-
-      playbackModal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-      
-      // Play the video when Play Episode button is clicked
-      playEpisodeBtn.addEventListener('click', () => {
-        modalVideo.play();
-      });
+    // Helper: always get the current <video> (we recreate this sometimes)
+    function getModalVideo() {
+      return document.getElementById('modal-video');
     }
 
+    /* === Tukaram-style helper functions === */
+    function isHls(u) {
+      if (!u) return false;
+      return u.includes('.m3u8') ||
+             u.includes('index-') ||
+             /index.*\.txt/i.test(u) ||
+             u.includes('manifest') ||
+             u.includes('master.m3u8');
+    }
+
+    function isMP4(u) {
+      return /\.mp4($|\?)/i.test(u || '');
+    }
+
+    function isYouTube(u) {
+      return !!(u && (u.includes('youtube.com') ||
+                      u.includes('youtu.be') ||
+                      u.includes('youtube-nocookie.com') ||
+                      u.includes('/embed/')));
+    }
+
+    // Reset modal-player to a fresh standard video element (used on close and before new playback)
+    function resetPlayerContainer() {
+      // Destroy HLS if any
+      if (currentHls) {
+        try { currentHls.destroy(); } catch (e) {}
+        currentHls = null;
+      }
+      // Reset inner HTML
+      modalPlayer.innerHTML = `
+        <video id="modal-video" class="w-full" controls playsinline>
+          Your browser does not support the video tag.
+        </video>
+      `;
+    }
+
+    // Close modal and cleanup
     function closeModalHandler() {
+      const videoEl = getModalVideo();
+      if (currentHls) {
+        try { currentHls.destroy(); } catch (e) {}
+        currentHls = null;
+      }
+      if (videoEl) {
+        try { videoEl.pause(); } catch(e) {}
+        try { videoEl.removeAttribute('src'); videoEl.load(); } catch(e) {}
+      }
+      resetPlayerContainer();
       playbackModal.classList.add('hidden');
-      modalVideo.pause();
-      modalVideo.currentTime = 0;
       document.body.style.overflow = '';
+      currentMovieIndex = null;
+      playBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Play';
+      progressBarFill.style.width = '0%';
     }
 
-    closeModal.addEventListener('click', closeModalHandler);
+    // Core: Tukaram-style playInModal
+    function playInModal(title, url, movie, episodeIndex) {
+      // Keep index for watchlist & progress
+      currentMovieIndex = episodeIndex;
 
-    // Close modal when clicking outside
-    playbackModal.addEventListener('click', (e) => {
-      if (e.target === playbackModal) {
-        closeModalHandler();
+      // Basic text info in modal
+      modalTitle.textContent = movie.title;
+      modalDescription.textContent = movie.description;
+      episodeNum.textContent = episodeIndex + 1;
+      modalDuration.textContent = movie.duration;
+      watchlistCheckbox.checked = movie.inWatchlist;
+      progressBarFill.style.width = '0%';
+
+      // Clean slate
+      resetPlayerContainer();
+
+      if (!url) {
+        modalTitle.textContent = title + ' — No playable URL provided';
+        playbackModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        return;
       }
-    });
 
-    // Render episode cards
-    episodes.forEach((episode, index) => {
-      const card = document.createElement('div');
-      card.className = 'episode-card bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition';
-      card.innerHTML = `
-        <div class="episode-image-container relative">
-          <img src="${episode.image}" alt="${episode.title}" class="episode-image w-full h-48 object-cover">
-          <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-            <div class="play-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-pixar-red bg-opacity-90 rounded-full w-12 h-12 flex items-center justify-center opacity-0 transition">
-              <i class="fas fa-play text-white"></i>
+      // Streamtape / etc. - iframe hosts
+      if (url.includes('streamtape.com') ||
+          url.includes('openload.co') ||
+          url.includes('vidcdn') ||
+          url.includes('dood')) {
+        modalPlayer.innerHTML = `
+          <iframe src="${url}" width="100%" height="100%" allowfullscreen
+                  allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>`;
+        playbackModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        loadingSpinner.classList.add('hidden');
+        return;
+      }
+
+      // YouTube
+      if (isYouTube(url)) {
+        let embedUrl = url;
+        if (url.includes('watch') && url.includes('v=')) {
+          const vid = new URLSearchParams(url.split('?')[1]).get('v');
+          if (vid) embedUrl = `https://www.youtube.com/embed/${vid}`;
+        } else if (url.includes('youtu.be/')) {
+          const parts = url.split('youtu.be/');
+          if (parts[1]) {
+            const vid = parts[1].split(/[?&]/)[0];
+            embedUrl = `https://www.youtube.com/embed/${vid}`;
+          }
+        }
+        modalPlayer.innerHTML = `
+          <iframe src="${embedUrl}?autoplay=1&modestbranding=1&rel=0"
+                  width="100%" height="100%" allowfullscreen
+                  allow="autoplay; encrypted-media" frameborder="0"></iframe>`;
+        playbackModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        loadingSpinner.classList.add('hidden');
+        return;
+      }
+
+      const videoEl = getModalVideo();
+
+      // HLS
+      if (isHls(url)) {
+        if (Hls.isSupported()) {
+          currentHls = new Hls();
+          currentHls.loadSource(url);
+          currentHls.attachMedia(videoEl);
+          currentHls.on(Hls.Events.MANIFEST_PARSED, () => {
+            playbackModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadingSpinner.classList.add('hidden');
+            videoEl.play().catch(() => {});
+          });
+        } else {
+          videoEl.src = url;
+          playbackModal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          loadingSpinner.classList.add('hidden');
+          videoEl.play().catch(() => {});
+        }
+        return;
+      }
+
+      // MP4
+      if (isMP4(url)) {
+        videoEl.src = url;
+        playbackModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        loadingSpinner.classList.add('hidden');
+        videoEl.play().catch(() => {});
+        return;
+      }
+
+      // Unknown type – fallback to player.html
+      loadingSpinner.classList.add('hidden');
+      window.location.href = `player.html?title=${encodeURIComponent(title)}&video=${encodeURIComponent(url)}`;
+    }
+
+    // Initialize the page
+    function initPage() {
+      // Create movie cards
+      movies.forEach((movie, index) => {
+        const card = document.createElement('div');
+        card.className = `movie-card fade-in delay-${index % 5} glow-effect`;
+        card.innerHTML = `
+          <div class="relative group overflow-hidden rounded-xl cursor-pointer">
+            <img src="${movie.image}" alt="${movie.title}" 
+                 class="w-full h-48 sm:h-56 md:h-64 object-cover rounded-xl transition duration-500 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <div>
+                <h3 class="text-white font-semibold text-lg">${movie.title}</h3>
+                <p class="text-gray-300 text-sm">${movie.duration}</p>
+              </div>
+            </div>
+            <div class="absolute top-3 right-3 bg-black bg-opacity-70 text-yellow-500 rounded-full w-10 h-10 flex items-center justify-center">
+              <i class="fas fa-play"></i>
+            </div>
+            <div class="absolute top-3 left-3 flex items-center bg-black/70 px-2 py-1 rounded-full">
+              <i class="fas fa-star text-yellow-500 text-xs mr-1"></i>
+              <span class="text-white text-xs">${movie.rating}</span>
             </div>
           </div>
-          <span class="absolute top-2 right-2 episode-badge text-white text-xs px-2 py-1 rounded">${episode.runtime}</span>
-        </div>
-        <div class="p-4">
-          <div class="flex justify-between items-start mb-1">
-            <h2 class="font-semibold">${episode.title}</h2>
-            <span class="text-pixar-yellow text-sm">${episode.rating}</span>
+          <div class="mt-3">
+            <h3 class="text-white font-medium">${movie.title}</h3>
+            <div class="flex items-center text-gray-400 text-sm mt-1">
+              <span>S1 • E${index + 1}</span>
+              <span class="mx-2">•</span>
+              <span>${movie.duration}</span>
+            </div>
           </div>
-          <div class="flex items-center justify-between">
-            <p class="text-sm text-gray-400">Episode ${index + 1}</p>
-            <button class="text-gray-400 hover:text-pixar-red transition">
-              <i class="fas fa-ellipsis-h"></i>
-            </button>
-          </div>
-        </div>
-      `;
-      card.addEventListener('click', () => {
-        openModal(episode, index + 1);
-      });
-      container.appendChild(card);
-    });
-
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+        `;
         
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+        card.addEventListener('click', () => {
+          loadingSpinner.classList.remove('hidden');
+          playInModal(movie.title, movie.video, movie, index);
+        });
+        
+        container.appendChild(card);
+      });
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelector('.filter-btn.active').classList.remove('active', 'bg-yellow-600', 'text-black');
+          this.classList.add('active', 'bg-yellow-600', 'text-black');
         });
       });
+
+      // Season buttons
+      seasonBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelector('.season-btn.active').classList.remove('active', 'bg-yellow-600', 'text-black');
+          this.classList.add('active', 'bg-yellow-600', 'text-black');
+        });
+      });
+
+      // Initialize watchlist from local state
+      updateWatchlist();
+    }
+
+    // Update watchlist display
+    function updateWatchlist() {
+      watchlistItems.innerHTML = '';
+      const watchlistMovies = movies.filter(movie => movie.inWatchlist);
+      if (watchlistMovies.length === 0) {
+        watchlistItems.innerHTML = '<div class="px-4 py-3 text-center text-gray-400">Your watchlist is empty</div>';
+        return;
+      }
+      watchlistMovies.forEach((movie, idx) => {
+        const index = movies.indexOf(movie);
+        const item = document.createElement('div');
+        item.className = 'px-4 py-3 hover:bg-gray-800 transition cursor-pointer flex items-center justify-between';
+        item.innerHTML = `
+          <div class="flex items-center">
+            <span class="text-yellow-500 text-sm mr-2">${idx + 1}.</span>
+            <span class="text-white text-sm truncate">${movie.title}</span>
+          </div>
+          <button class="remove-from-watchlist text-gray-400 hover:text-red-500" data-index="${index}">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        item.querySelector('.remove-from-watchlist').addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeFromWatchlist(index);
+        });
+        item.addEventListener('click', () => {
+          loadingSpinner.classList.remove('hidden');
+          playInModal(movie.title, movie.video, movie, index);
+          watchlistDropdown.classList.add('hidden');
+        });
+        watchlistItems.appendChild(item);
+      });
+    }
+
+    function addToWatchlist(index) {
+      movies[index].inWatchlist = true;
+      updateWatchlist();
+    }
+
+    function removeFromWatchlist(index) {
+      movies[index].inWatchlist = false;
+      updateWatchlist();
+    }
+
+    // Event listeners
+    searchBtn.addEventListener('click', () => {
+      searchBar.classList.toggle('hidden');
+      watchlistDropdown.classList.add('hidden');
     });
 
-    // Make video header play/pause on hover
-    const headerVideo = document.querySelector('.video-header video');
-    
-    // Autoplay is handled by the autoplay attribute, but we'll ensure it plays
-    headerVideo.play().catch(e => {
-      console.log("Autoplay prevented, showing fallback");
+    watchlistBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      watchlistDropdown.classList.toggle('hidden');
+      searchBar.classList.add('hidden');
     });
-    
-    // Add animation to road elements
-    function createRoadElements() {
-      const roadBg = document.querySelector('.road-bg');
-      for (let i = 0; i < 5; i++) {
-        const tire = document.createElement('div');
-        tire.className = 'tire-track';
-        tire.style.top = `${Math.random() * 50}px`;
-        tire.style.animationDuration = `${15 + Math.random() * 10}s`;
-        tire.style.animationDelay = `${Math.random() * 5}s`;
-        roadBg.appendChild(tire);
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('bg-gray-100');
+      document.body.classList.toggle('text-gray-900');
+      document.body.classList.toggle('bg-black');
+      document.body.classList.toggle('text-gray-100');
+      
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('bg-black')) {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
       }
+    });
+
+    closeModal.addEventListener('click', closeModalHandler);
+    playbackModal.addEventListener('click', function(e) {
+      if (e.target === this) closeModalHandler();
+    });
+
+    // Play/pause button for the in-modal video (HLS or MP4 only)
+    playBtn.addEventListener('click', () => {
+      const videoEl = getModalVideo();
+      if (!videoEl) return;
+      if (videoEl.paused) {
+        videoEl.play();
+        playBtn.innerHTML = '<i class="fas fa-pause mr-2"></i> Pause';
+      } else {
+        videoEl.pause();
+        playBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Play';
+      }
+    });
+
+    watchlistCheckbox.addEventListener('change', function() {
+      if (currentMovieIndex == null) return;
+      if (this.checked) {
+        addToWatchlist(currentMovieIndex);
+      } else {
+        removeFromWatchlist(currentMovieIndex);
+      }
+    });
+
+    // Progress bar (only works when a video element is present)
+    document.addEventListener('timeupdate', (e) => {
+      const videoEl = getModalVideo();
+      if (!videoEl) return;
+    });
+    // Direct listener on video element (re-attached whenever we recreate)
+    function attachVideoListeners() {
+      const videoEl = getModalVideo();
+      if (!videoEl) return;
+      videoEl.addEventListener('timeupdate', () => {
+        if (!videoEl.duration) return;
+        const progress = (videoEl.currentTime / videoEl.duration) * 100;
+        progressBarFill.style.width = progress + '%';
+      });
+      videoEl.addEventListener('ended', () => {
+        playBtn.innerHTML = '<i class="fas fa-redo mr-2"></i> Replay';
+      });
     }
-    
-    createRoadElements();
+    // Attach once initially
+    attachVideoListeners();
+    // Also re-attach whenever we resetPlayerContainer
+    const originalReset = resetPlayerContainer;
+    resetPlayerContainer = function() {
+      originalReset();
+      attachVideoListeners();
+    };
+
+    scrollDownBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: document.querySelector('#movies').offsetTop - 20,
+        behavior: 'smooth'
+      });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!watchlistBtn.contains(e.target) && !watchlistDropdown.contains(e.target)) {
+        watchlistDropdown.classList.add('hidden');
+      }
+      
+      if (!searchBtn.contains(e.target) && !searchBar.contains(e.target)) {
+        searchBar.classList.add('hidden');
+      }
+    });
+
+    // Initialize the page when loaded
+    window.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
-</
 </html>
